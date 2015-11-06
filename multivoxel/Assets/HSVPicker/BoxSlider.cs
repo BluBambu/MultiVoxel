@@ -342,83 +342,13 @@ namespace UnityEngine.UI
 			UpdateDrag(eventData, eventData.pressEventCamera);
 		}
 		
-        //public override void OnMove(AxisEventData eventData)
-        //{
-        //    if (!IsActive() || !IsInteractable())
-        //    {
-        //        base.OnMove(eventData);
-        //        return;
-        //    }
-			
-        //    switch (eventData.moveDir)
-        //    {
-        //    case MoveDirection.Left:
-        //        if (axis == Axis.Horizontal && FindSelectableOnLeft() == null) {
-        //            Set(reverseValue ? value + stepSize : value - stepSize);
-        //            SetY (reverseValue ? valueY + stepSize : valueY - stepSize);
-        //        }
-        //        else
-        //            base.OnMove(eventData);
-        //        break;
-        //    case MoveDirection.Right:
-        //        if (axis == Axis.Horizontal && FindSelectableOnRight() == null) {
-        //            Set(reverseValue ? value - stepSize : value + stepSize);
-        //            SetY(reverseValue ? valueY - stepSize : valueY + stepSize);
-        //        }
-        //        else
-        //            base.OnMove(eventData);
-        //        break;
-        //    case MoveDirection.Up:
-        //        if (axis == Axis.Vertical && FindSelectableOnUp() == null) {
-        //            Set(reverseValue ? value - stepSize : value + stepSize);
-        //            SetY(reverseValue ? valueY - stepSize : valueY + stepSize);
-        //        }
-        //        else
-        //            base.OnMove(eventData);
-        //        break;
-        //    case MoveDirection.Down:
-        //        if (axis == Axis.Vertical && FindSelectableOnDown() == null) {
-        //            Set(reverseValue ? value + stepSize : value - stepSize);
-        //            SetY(reverseValue ? valueY + stepSize : valueY - stepSize);
-        //        }
-        //        else
-        //            base.OnMove(eventData);
-        //        break;
-        //    }
-        //}
-		
-        //public override Selectable FindSelectableOnLeft()
-        //{
-        //    if (navigation.mode == Navigation.Mode.Automatic && axis == Axis.Horizontal)
-        //        return null;
-        //    return base.FindSelectableOnLeft();
-        //}
-		
-        //public override Selectable FindSelectableOnRight()
-        //{
-        //    if (navigation.mode == Navigation.Mode.Automatic && axis == Axis.Horizontal)
-        //        return null;
-        //    return base.FindSelectableOnRight();
-        //}
-		
-        //public override Selectable FindSelectableOnUp()
-        //{
-        //    if (navigation.mode == Navigation.Mode.Automatic && axis == Axis.Vertical)
-        //        return null;
-        //    return base.FindSelectableOnUp();
-        //}
-		
-        //public override Selectable FindSelectableOnDown()
-        //{
-        //    if (navigation.mode == Navigation.Mode.Automatic && axis == Axis.Vertical)
-        //        return null;
-        //    return base.FindSelectableOnDown();
-        //}
-		
 		public virtual void OnInitializePotentialDrag(PointerEventData eventData)
 		{
 			eventData.useDragThreshold = false;
 		}
 
+		public virtual void LayoutComplete() {}
+
+		public virtual void GraphicUpdateComplete() {}
 	}
 }
