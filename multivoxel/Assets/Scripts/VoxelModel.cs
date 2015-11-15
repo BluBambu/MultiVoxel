@@ -21,27 +21,15 @@ public class VoxelModel : MonoBehaviour
 		_voxelRenderer.RenderMesh(_voxelData);
 	}
 
-    // Add a voxel to the model at a location normally adjacent to the given raycast hit data
-	public void AddVoxel(RaycastHit hitData, Color color) 
-	{
-		_voxelData.AddVoxel(GetAdjacentBlockPos(hitData), color);
-		_voxelRenderer.RenderMesh(_voxelData);
-	}
+    public void AddVoxel(Vector3 pos, Color color)
+    {
+        _voxelData.AddVoxel(Utils.RoundVector3(pos), color);
+        _voxelRenderer.RenderMesh(_voxelData);
+    } 
 
-    // Gets the block normally adjacent to the raycast hit data
-	private Vector3 GetAdjacentBlockPos(RaycastHit hit) 
-	{
-    	return new Vector3(MoveWithinBlock(hit.point.x, hit.normal.x, true),
-            MoveWithinBlock(hit.point.y, hit.normal.y, true),
-            MoveWithinBlock(hit.point.z, hit.normal.z, true));
-	}
-
-    private float MoveWithinBlock(float pos, float norm, bool adjacent)
-     {
-        if (pos - (int)pos == 0.5f || pos - (int)pos == -0.5f)
-        {
-        	pos += (adjacent ? 1 : -1) * (norm / 2);
-        }
-        return pos;
-     }
+    public void RemoveVoxel(Vector3 pos)
+    {
+        _voxelData.RemoveVoxel(Utils.RoundVector3(pos));
+        _voxelRenderer.RenderMesh(_voxelData);
+    }
  }
