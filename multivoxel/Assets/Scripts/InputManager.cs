@@ -54,9 +54,9 @@ public class InputManager : MonoBehaviour {
         // Zoom the camera in/out if the user scrolls
 		float scroll = Input.GetAxis(Constants.Input.MouseScrollWheel);
 		if (scroll > 0) {
-			CameraController.Instance.IncrementDistance();
+			CameraController.Instance.IncrementCamDistance();
 		} else if (scroll < 0) {
-			CameraController.Instance.DecrementDistance();
+			CameraController.Instance.DecrementCamDistance();
 		}
 	}
 }
