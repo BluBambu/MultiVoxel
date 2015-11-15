@@ -1,19 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public struct VoxelSaveData
-{
-    internal Voxel[] _data;
-
-    internal VoxelSaveData(Voxel[] data)
-    {
-        _data = data;
-    }
-}
-
-/// <summary>
-/// Holds voxel data
-/// </summary>
+// Holds voxel data
 public class VoxelData 
 {
 	public IEnumerable<Voxel> Voxels 
@@ -21,24 +9,22 @@ public class VoxelData
 		get { return _data.Values; }
 	}
 
-	private Dictionary<Vector3, Voxel> _data;
+	private readonly Dictionary<Vector3, Voxel> _data;
 
-    /// <summary>
-    /// Construct a new set of voxel data
-    /// </summary>
     public VoxelData() 
     {
     	_data = new Dictionary<Vector3, Voxel>();
     }
 
-    public VoxelData(VoxelSaveData saveData) : base()
+    public VoxelData(Voxel[] saveData) : base()
     {
-        foreach (Voxel voxel in saveData._data)
+        foreach (Voxel voxel in saveData)
         {
             _data[voxel.Pos] = voxel;
         }
     }
 
+    // Will override any previous voxel that exists at the given pos
     public void AddVoxel(Vector3 pos, Color color) 
     {
     	_data[Utils.RoundVector3(pos)] = new Voxel(Utils.RoundVector3(pos), color);
@@ -49,10 +35,10 @@ public class VoxelData
     	return _data.ContainsKey(Utils.RoundVector3(pos));
     }
 
-    public VoxelSaveData GetSaveData()
+    public Voxel[] GetSaveData()
     {
         Voxel[] saveData = new Voxel[_data.Count];
         _data.Values.CopyTo(saveData, 0);
-        return new VoxelSaveData(saveData);
+        return saveData;
     }
 }

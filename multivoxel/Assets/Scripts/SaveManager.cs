@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.IO;
 
 public class SaveManager : MonoBehaviour
@@ -11,15 +10,8 @@ public class SaveManager : MonoBehaviour
         get { return Directory.GetCurrentDirectory() + "/" + SaveFolderName; }
     }
 
-	// Use this for initialization
 	void Start ()
 	{
 	    print(FullSavePath);
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
 	}
 }

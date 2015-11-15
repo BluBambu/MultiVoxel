@@ -17,6 +17,8 @@ public class VoxelModelRenderer : MonoBehaviour
 		_meshFilter = GetComponent<MeshFilter>();
 	}
 
+    // TODO: Clean all of this code up...
+
     /// <summary>
     /// Update the model to represent the given voxel data
     /// </summary>
