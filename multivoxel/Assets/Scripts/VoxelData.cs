@@ -44,11 +44,4 @@ public class VoxelData
     {
     	return _data.ContainsKey(Utils.RoundVector3(pos));
     }
-
-    public Voxel[] GetSaveData()
-    {
-        Voxel[] saveData = new Voxel[_data.Count];
-        _data.Values.CopyTo(saveData, 0);
-        return saveData;
-    }
 }
