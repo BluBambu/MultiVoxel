@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Maintains various constants.
-/// </summary>
 public class Constants : MonoBehaviour
 {
     public class Tags

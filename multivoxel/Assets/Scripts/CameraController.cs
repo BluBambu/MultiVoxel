@@ -58,7 +58,7 @@ public class CameraController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (InputManager.CurrentMouseDownType == InputManager.MouseDownType.CameraMove)
+		if (InputManager.CurrentMouseActionType == InputManager.MouseActionType.CameraMove)
 		{
 			_deltaX += Input.GetAxis(Constants.Input.MouseX) * MoveSpeedX * Time.deltaTime;
 			_deltaY -= Input.GetAxis(Constants.Input.MouseY) * MoveSpeedY * Time.deltaTime;
