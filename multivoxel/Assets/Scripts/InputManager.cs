@@ -61,19 +61,17 @@ public class InputManager : MonoBehaviour
 	}
 
     // Gets the closest world position normally adjacent to the raycast hit
-    private Vector3 ConvertToWorldAdjPos(RaycastHit hit)
+    private Vector3Int ConvertToWorldAdjPos(RaycastHit hit)
     {
-        return Utils.RoundVector3(new 
-            Vector3(MoveAroundBlock(hit.point.x, hit.normal.x, true),
+        return (Vector3Int) (new Vector3(MoveAroundBlock(hit.point.x, hit.normal.x, true),
             MoveAroundBlock(hit.point.y, hit.normal.y, true),
             MoveAroundBlock(hit.point.z, hit.normal.z, true)));
     }
 
     // Gets the closest world position that the raycast hits
-    private Vector3 ConvertToWorldHitPos(RaycastHit hit)
+    private Vector3Int ConvertToWorldHitPos(RaycastHit hit)
     {
-        return Utils.RoundVector3(new 
-            Vector3(MoveAroundBlock(hit.point.x, hit.normal.x, false),
+        return (Vector3Int) (new Vector3(MoveAroundBlock(hit.point.x, hit.normal.x, false),
             MoveAroundBlock(hit.point.y, hit.normal.y, false),
             MoveAroundBlock(hit.point.z, hit.normal.z, false)));
     }

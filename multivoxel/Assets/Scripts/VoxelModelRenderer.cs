@@ -31,27 +31,27 @@ public class VoxelModelRenderer : MonoBehaviour
 
         foreach (Voxel voxel in voxelData.Voxels)
         {
-            if (!voxelData.HasVoxelAtPos(voxel.Pos + Vector3.up))
+            if (!voxelData.HasVoxelAtPos(voxel.Pos + Vector3Int.Up))
             {
                 GenTopFace(voxel, verts, trigs, colors);
             }
-            if (!voxelData.HasVoxelAtPos(voxel.Pos - Vector3.up))
+            if (!voxelData.HasVoxelAtPos(voxel.Pos - Vector3Int.Up))
             {
                 GenBottomFace(voxel, verts, trigs, colors);
             }
-            if (!voxelData.HasVoxelAtPos(voxel.Pos + Vector3.forward))
+            if (!voxelData.HasVoxelAtPos(voxel.Pos + Vector3Int.Forward))
             {
                 GenNorthFace(voxel, verts, trigs, colors);
             }
-            if (!voxelData.HasVoxelAtPos(voxel.Pos - Vector3.forward))
+            if (!voxelData.HasVoxelAtPos(voxel.Pos - Vector3Int.Forward))
             {
                 GenSouthFace(voxel, verts, trigs, colors);
             }
-            if (!voxelData.HasVoxelAtPos(voxel.Pos - Vector3.left))
+            if (!voxelData.HasVoxelAtPos(voxel.Pos + Vector3Int.Right))
             { 
                 GenEastFace(voxel, verts, trigs, colors);
             }
-            if (!voxelData.HasVoxelAtPos(voxel.Pos + Vector3.left))
+            if (!voxelData.HasVoxelAtPos(voxel.Pos - Vector3Int.Right))
             {
                 GenWestFace(voxel, verts, trigs, colors);
             }
@@ -73,55 +73,55 @@ public class VoxelModelRenderer : MonoBehaviour
 
 	private void GenTopFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y, voxel.Pos.z));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z));
         InitFace(verts, trigs, colors, voxel.Color);
     }
 
     private void GenBottomFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y - 1, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y - 1, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y - 1, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y - 1, voxel.Pos.z + 1));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y - 1, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y - 1, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y - 1, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y - 1, voxel.Pos.Z + 1));
         InitFace(verts, trigs, colors, voxel.Color);
     }
 
     private void GenNorthFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y - 1, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y - 1, voxel.Pos.z + 1));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y - 1, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y - 1, voxel.Pos.Z + 1));
         InitFace(verts, trigs, colors, voxel.Color);
     }
 
     private void GenEastFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y - 1, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y - 1, voxel.Pos.z + 1));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y - 1, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y - 1, voxel.Pos.Z + 1));
         InitFace(verts, trigs, colors, voxel.Color);
     }
 
     private void GenSouthFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y - 1, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x + 1, voxel.Pos.y - 1, voxel.Pos.z));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y - 1, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X + 1, voxel.Pos.Y - 1, voxel.Pos.Z));
         InitFace(verts, trigs, colors, voxel.Color);
     }
 
     private void GenWestFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y - 1, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y, voxel.Pos.z + 1));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y, voxel.Pos.z));
-        verts.Add(new Vector3(voxel.Pos.x, voxel.Pos.y - 1, voxel.Pos.z));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y - 1, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z + 1));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z));
+        verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y - 1, voxel.Pos.Z));
         InitFace(verts, trigs, colors, voxel.Color);
     }
 
