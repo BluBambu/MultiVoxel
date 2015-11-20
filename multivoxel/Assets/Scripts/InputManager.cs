@@ -14,12 +14,12 @@ public class InputManager : MonoBehaviour
 	public static MouseActionType CurrentMouseActionType { private set; get; }
 
     private HSVPicker _hsvColorPicker;
-	private VoxelModel _voxelModel;
+	private VoxelController _voxelController;
 
 	private void Awake() 
 	{
         _hsvColorPicker = FindObjectOfType<HSVPicker>();
-		_voxelModel = FindObjectOfType<VoxelModel>();
+		_voxelController = FindObjectOfType<VoxelController>();
 	}
 
 	void Update () 
@@ -29,7 +29,7 @@ public class InputManager : MonoBehaviour
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit)) {
                 // If we've clicked on the model, then modify the model
 				CurrentMouseActionType = MouseActionType.Edit;
-				_voxelModel.AddVoxel(ConvertToWorldAdjPos(hit), _hsvColorPicker.currentColor);
+				_voxelController.AddVoxel(new Voxel(ConvertToWorldAdjPos(hit), _hsvColorPicker.currentColor));
 			} else {
 			    if (!EventSystem.current.IsPointerOverGameObject())
 			    {
@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 // If we've clicked on the model, then modify the model
-                _voxelModel.RemoveVoxel(ConvertToWorldHitPos(hit));
+                _voxelController.RemoveVoxel(ConvertToWorldHitPos(hit));
             }
         }
 

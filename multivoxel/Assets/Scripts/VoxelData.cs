@@ -4,7 +4,7 @@ using System.Collections.Generic;
 // Holds voxel data
 public class VoxelData 
 {
-	public IEnumerable<Voxel> Voxels 
+	public IEnumerable<Voxel> Voxels
 	{
 		get { return _data.Values; }
 	}
@@ -14,7 +14,7 @@ public class VoxelData
     public VoxelData() 
     {
     	_data = new Dictionary<Vector3Int, Voxel>();
-        AddVoxel(Vector3Int.Zero, Color.white);
+        AddVoxel(new Voxel(Vector3Int.Zero, Color.white));
     }
 
     public VoxelData(Voxel[] saveData)
@@ -27,9 +27,9 @@ public class VoxelData
     }
 
     // Will override any previous voxel that exists at the given pos
-    public void AddVoxel(Vector3Int pos, Color color) 
+    public void AddVoxel(Voxel voxel) 
     {
-    	_data[pos] = new Voxel(pos, color);
+    	_data[voxel.Pos] = voxel;
     }
 
     // Does nothing if there is no voxel at the given pos or if we're removing the origin block
