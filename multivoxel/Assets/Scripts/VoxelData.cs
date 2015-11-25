@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 // Holds voxel data
 public class VoxelData 
 {
-	public IEnumerable<Voxel> Voxels
-	{
-		get { return _data.Values; }
-	}
-
+    // Maps a voxel position to the voxel itself
 	private readonly Dictionary<Vector3Int, Voxel> _data;
+
+    public IEnumerable<Voxel> Voxels
+    {
+        get { return _data.Values.ToArray(); }
+    }
 
     public VoxelData() 
     {
@@ -17,7 +19,7 @@ public class VoxelData
         AddVoxel(new Voxel(Vector3Int.Zero, Color.white));
     }
 
-    public VoxelData(Voxel[] saveData)
+    public VoxelData(IEnumerable<Voxel> saveData)
     {
     	_data = new Dictionary<Vector3Int, Voxel>();
         foreach (Voxel voxel in saveData)

@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Serializable]
 public struct Vector3Int
 {
     public static readonly Vector3Int Zero = new Vector3Int();
@@ -39,12 +41,15 @@ public struct Vector3Int
         return string.Format("({0}, {1}, {2})", X, Y, Z);
     }
 
+    // Vector3 -> Vector3Int
+    // Round the Vector3 components to the nearest integer
     public static explicit operator Vector3Int(Vector3 v)
     {
         return new Vector3Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), 
             Mathf.RoundToInt(v.z));
     }
 
+    // Vector3Int -> Vector3
     public static explicit operator Vector3(Vector3Int v)
     {
         return new Vector3(v.X, v.Y, v.Z);
