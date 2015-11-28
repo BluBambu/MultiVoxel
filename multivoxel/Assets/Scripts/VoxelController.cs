@@ -26,11 +26,8 @@ public class VoxelController : MonoBehaviour
 
     public void AddVoxel(Voxel voxel)
     {
-        _voxelAnimation.AddVoxelAnimation(voxel, () =>
-        {
-            _voxelData.AddVoxel(voxel);
-            _voxelRenderer.RenderMesh(_voxelData);
-        });
+        _voxelData.AddVoxel(voxel);
+        _voxelRenderer.RenderMesh(_voxelData);
     } 
 
     public void RemoveVoxel(Vector3Int pos)
