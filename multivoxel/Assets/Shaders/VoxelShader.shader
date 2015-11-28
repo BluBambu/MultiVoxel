@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced 'SeperateSpecular' with 'SeparateSpecular'
 
-Shader " Vertex Colored" {
+Shader "Voxel" {
 	Properties{
 		_Color("Main Color", Color) = (1,1,1,1)
 		_SpecColor("Spec Color", Color) = (1,1,1,1)
