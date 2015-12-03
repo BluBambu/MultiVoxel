@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 // Holds voxel data
+[System.Serializable]
 public class VoxelData 
 {
     // Maps a voxel position to the voxel itself
