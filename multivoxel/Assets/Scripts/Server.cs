@@ -33,7 +33,7 @@ public static class Server {
 	public static void Start(int tcpPort, string logfilePath) {
 		_logger = new Logger (logfilePath);
 		Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		serverSocket.Bind (new IPEndPoint (IPAddress.Loopback, tcpPort));
+		serverSocket.Bind (new IPEndPoint (IPAddress.Any, tcpPort));
 		serverSocket.Listen (0);
 		_logger.Log (string.Format (
 			"listening on {0}:{1}",
