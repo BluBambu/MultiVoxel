@@ -31,7 +31,7 @@ public static class Server {
 	
 	public static void Start(int tcpPort) {
 		Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		serverSocket.Bind (new IPEndPoint (IPAddress.Loopback, tcpPort));
+		serverSocket.Bind (new IPEndPoint (IPAddress.Any, tcpPort));
 		serverSocket.Listen (0);
 		while (true) {
 			// accept client
