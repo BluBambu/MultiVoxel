@@ -28,14 +28,24 @@ public static class Server {
 	private static object _coarseLock = new object();
 	private static List<Socket> _clientSockets = new List<Socket>();
 	private static VoxelData _voxelData = new VoxelData();
+	private static Logger _logger;
 	
-	public static void Start(int tcpPort) {
+	public static void Start(int tcpPort, string logfilePath) {
+		_logger = new Logger (logfilePath);
 		Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		serverSocket.Bind (new IPEndPoint (IPAddress.Loopback, tcpPort));
 		serverSocket.Listen (0);
+		_logger.Log (string.Format (
+			"listening on {0}:{1}",
+			((IPEndPoint) serverSocket.LocalEndPoint).Address,
+			((IPEndPoint) serverSocket.LocalEndPoint).Port));
 		while (true) {
 			// accept client
 			Socket clientSocket = serverSocket.Accept();
+			_logger.Log(string.Format (
+				"accepted client from {0}:{1}",
+				((IPEndPoint) clientSocket.RemoteEndPoint).Address,
+				((IPEndPoint) clientSocket.RemoteEndPoint).Port));
 			
 			lock (_coarseLock) {
 				// send model
