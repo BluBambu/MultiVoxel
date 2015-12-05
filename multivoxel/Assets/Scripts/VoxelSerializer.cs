@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.IO;
+using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class VoxelSerializer
@@ -55,6 +57,58 @@ public static class VoxelSerializer
         using (MemoryStream stream = new MemoryStream(data))
         {
             return new VoxelData((Voxel[]) formatter.Deserialize(stream));
+        }
+    }
+
+    public static VoxelData VoxelDataFromFile(string filepath)
+    {
+        return DeserializeVoxelData(File.ReadAllBytes(filepath));
+    }
+
+    public static void VoxelDataToFile(string filepath, VoxelData data)
+    {
+        File.WriteAllBytes(filepath, SerializeVoxelData(data));
+    }
+
+    public static void VoxelMeshToObjFile(string filepath, MeshFilter mf)
+    {
+        // based on http://wiki.unity3d.com/index.php?title=ObjExporter
+        using (StreamWriter writer = new StreamWriter(filepath))
+        {
+            Mesh m = mf.mesh;
+            Material[] mats = mf.GetComponent<Renderer>().sharedMaterials;
+
+            writer.Write("g ");
+            writer.WriteLine(mf.name);
+            foreach (Vector3 v in m.vertices)
+            {
+                writer.WriteLine("v {0} {1} {2}", v.x, v.y, v.z);
+            }
+            writer.WriteLine();
+            foreach (Vector3 v in m.normals)
+            {
+                writer.WriteLine("vn {0} {1} {2}", v.x, v.y, v.z);
+            }
+            writer.WriteLine();
+            foreach (Vector3 v in m.uv)
+            {
+                writer.WriteLine("vt {0} {1}", v.x, v.y);
+            }
+            for (int material = 0; material < m.subMeshCount; material++)
+            {
+                writer.WriteLine();
+                writer.Write("usemtl ");
+                writer.WriteLine(mats[material].name);
+                writer.Write("usemap ");
+                writer.WriteLine(mats[material].name);
+
+                int[] triangles = m.GetTriangles(material);
+                for (int i = 0; i < triangles.Length; i += 3)
+                {
+                    writer.WriteLine("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}",
+                        triangles[i] + 1, triangles[i + 1] + 1, triangles[i + 2] + 1);
+                }
+            }
         }
     }
 }

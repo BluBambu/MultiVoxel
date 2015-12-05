@@ -71,6 +71,8 @@ public class VoxelModelRenderer : MonoBehaviour
         _meshCollider.sharedMesh = mesh;
 	}
 
+    public MeshFilter MeshFilter { get { return _meshFilter; } }
+
 	private void GenTopFace(Voxel voxel, List<Vector3> verts, List<int> trigs, List<Color> colors)
     {
         verts.Add(new Vector3(voxel.Pos.X, voxel.Pos.Y, voxel.Pos.Z + 1));
