@@ -57,4 +57,14 @@ public static class VoxelSerializer
             return new VoxelData((Voxel[]) formatter.Deserialize(stream));
         }
     }
+
+    public static VoxelData VoxelDataFromFile(string filepath)
+    {
+        return DeserializeVoxelData(File.ReadAllBytes(filepath));
+    }
+
+    public static void VoxelDataToFile(string filepath, VoxelData data)
+    {
+        File.WriteAllBytes(filepath, SerializeVoxelData(data));
+    }
 }
