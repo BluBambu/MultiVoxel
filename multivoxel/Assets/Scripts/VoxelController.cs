@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 // Represents the voxel model in the editor
 [RequireComponent(typeof(VoxelModelRenderer))]
@@ -35,4 +34,21 @@ public class VoxelController : MonoBehaviour
         _voxelData.RemoveVoxel(pos);
         _voxelRenderer.RenderMesh(_voxelData);
     }
- }
+
+    /// <summary>
+    /// Only load from file before the scene is live (before the user can edit the model)
+    /// </summary>
+    public void LoadFromFile(string filepath)
+    {
+        _voxelData = VoxelSerializer.VoxelDataFromFile(filepath);
+        _voxelRenderer.RenderMesh(_voxelData);
+    }
+
+    public void SaveToFile(string filepath)
+    {
+        if (filepath.EndsWith(".obj", System.StringComparison.InvariantCultureIgnoreCase))
+            VoxelSerializer.VoxelMeshToObjFile(filepath, _voxelRenderer.MeshFilter);
+        else
+            VoxelSerializer.VoxelDataToFile(filepath, _voxelData);
+    }
+}
