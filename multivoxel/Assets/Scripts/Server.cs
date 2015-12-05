@@ -1,13 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 
 /*
  * The "server" is a collection of threads running C# (non-Unity) code.
- * 
- * This scripts starts the server with parameters in Config.cs.
  * 
  * In general, the server is responsible for
  *   Accepting client connections
@@ -20,7 +17,7 @@ using System.Collections.Generic;
  *   Applies VoxelCommand's to its own VoxelData
  *   Sends VoxelData to each new client
  */
-public class Server : MonoBehaviour {
+public static class Server {
 
 	/*
 	 * coarseLock should be held by code that does any of the following:
@@ -28,46 +25,40 @@ public class Server : MonoBehaviour {
 	 *   writing to any of the sockets in clientSockets
 	 *   touching voxelData
 	 */
-	private static object coarseLock = new object();
-	private static List<Socket> clientSockets = new List<Socket>();
-	private static VoxelData voxelData = new VoxelData();
+	private static object _coarseLock = new object();
+	private static List<Socket> _clientSockets = new List<Socket>();
+	private static VoxelData _voxelData = new VoxelData();
 	
-	void Awake () {
-		if (Config.HAS_SERVER) {
-			Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			serverSocket.Bind (new IPEndPoint (IPAddress.Parse(Config.SERVER_ADDRESS), Config.SERVER_PORT));
-			serverSocket.Listen (0);
-			Concurrency.StartThread(() => AcceptClients(serverSocket), "server accepting clients loop");
-		}
-	}
-
-	private static void AcceptClients(Socket serverSocket) {
+	public static void Start(int tcpPort) {
+		Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		serverSocket.Bind (new IPEndPoint (IPAddress.Loopback, tcpPort));
+		serverSocket.Listen (0);
 		while (true) {
 			// accept client
 			Socket clientSocket = serverSocket.Accept();
-
-			lock (coarseLock) {
+			
+			lock (_coarseLock) {
 				// send model
-				Protocol.Send(clientSocket, voxelData);
-
+				Protocol.Send(clientSocket, _voxelData);
+				
 				// add client to sockets
-				clientSockets.Add(clientSocket);
+				_clientSockets.Add(clientSocket);
 			}
 			Concurrency.StartThread(() => HandleClient(clientSocket), "server handle client");
 		}
 	}
-
+	
 	private static void HandleClient(Socket clientSocket) {
 		while (true) {
 			// deserialize message to command
 			VoxelCommand cmd = (VoxelCommand) Protocol.Receive(clientSocket);
 
-			lock (coarseLock) {
+			lock (_coarseLock) {
 				// apply command to model
-				cmd.Apply(voxelData);
+				cmd.Apply(_voxelData);
 
 				// broadcast command to other clients
-				foreach (Socket socket in clientSockets) {
+				foreach (Socket socket in _clientSockets) {
 					Protocol.Send(socket, cmd);
 				}
 			}
