@@ -40,18 +40,27 @@ public class MainMenuGUI : MonoBehaviour
     {
         ServerButton.onClick.AddListener(() =>
         {
-            
+            // Replace with successful server creation condition
+            if (true)
+            {
+                PersistentData.Instance.LoadPath = LoadPath;
+                Application.LoadLevel(1);
+            }
         });
 
         ClientButton.onClick.AddListener(() =>
         {
-
+            // Replace with successful client creation condition
+            if (true)
+            {
+                Application.LoadLevel(1);
+            }
         });
 
         ExitButton.onClick.AddListener(Application.Quit);
     }
 
-    public void WriteToErrorBox(string msg)
+    private void WriteToErrorBox(string msg)
     {
         ErrorTextBox.text = msg;
     }

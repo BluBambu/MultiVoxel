@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 // Represents the voxel model in the editor
 [RequireComponent(typeof(VoxelModelRenderer))]
