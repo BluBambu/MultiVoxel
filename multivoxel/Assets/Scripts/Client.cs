@@ -15,7 +15,8 @@ public static class Client {
 	private static Queue<object> _sendQueue = new Queue<object>();
 	private static IDictionary<System.Type, Queue<object>> _receiveQueues = new Dictionary<System.Type, Queue<object>>();
 	private static Logger _logger;
-	
+
+	// Throws an exception on error.
 	public static void Start(string serverAddress, int serverPort, string logfilePath) {
 		_logger = new Logger (logfilePath);
 		_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

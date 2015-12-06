@@ -40,18 +40,28 @@ public class MainMenuGUI : MonoBehaviour
     {
         ServerButton.onClick.AddListener(() =>
         {
-            // Replace with successful server creation condition
-			Server.Start(Port, Config.SERVER_LOG_FILE);
+            // try to start the server
+			try {
+				Server.Start(Port, Config.SERVER_LOG_FILE);
+			} catch (Exception e) {
+				WriteToErrorBox(e.ToString());
+			}
+
+			// this thread does nothing now...
         });
 
         ClientButton.onClick.AddListener(() =>
         {
-            // Replace with successful client creation condition
-			Client.Start(IpAddress, Port, Config.CLIENT_LOG_FILE);
-            if (true)
-            {
-                Application.LoadLevel(1);
-            }
+            // try to start the client
+			try {
+				Client.Start(IpAddress, Port, Config.CLIENT_LOG_FILE);
+			} catch (Exception e) {
+				WriteToErrorBox(e.ToString());
+				return;
+			}
+
+			// load editor if client successfully starts
+            Application.LoadLevel(1);
         });
 
         ExitButton.onClick.AddListener(Application.Quit);

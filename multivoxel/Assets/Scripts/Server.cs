@@ -29,7 +29,8 @@ public static class Server {
 	private static List<Socket> _clientSockets = new List<Socket>();
 	private static VoxelData _voxelData = new VoxelData();
 	private static Logger _logger;
-	
+
+	// Throws an exception on error.
 	public static void Start(int tcpPort, string logfilePath) {
 		_logger = new Logger (logfilePath);
 		Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
