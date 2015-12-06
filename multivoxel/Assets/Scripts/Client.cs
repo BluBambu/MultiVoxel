@@ -30,6 +30,7 @@ public static class Client {
 	}
 	
 	private static void Sender() {
+		_logger.Log ("sender thread started");
 		while (true) {
 			bool hasObj = false;
 			object obj = null;
@@ -40,15 +41,20 @@ public static class Client {
 				}
 			}
 			if (hasObj) {
+				System.Type type = obj.GetType;
+				_logger.Log (string.Format("sending object of type {0}...", type));
 				Protocol.Send(_socket, obj);
+				_logger.Log (string.Format("sent object of type {0}", type));
 			}
 		}
 	}
 	
 	private static void Receiver() {
+		_logger.Log ("receiver thread started");
 		while (true) {
 			object obj = Protocol.Receive(_socket);
 			System.Type type = obj.GetType();
+			_logger.Log(string.Format("received object of type {0}", type));
 			lock (_receiveQueues) {
 				Queue<object> queue;
 				if (!_receiveQueues.TryGetValue(type, out queue)) {

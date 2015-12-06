@@ -43,6 +43,7 @@ public static class Server {
 	}
 
 	private static void AcceptClients(Socket serverSocket) {
+		_logger.Log ("accept clients thread started");
 		while (true) {
 			// accept client
 			Socket clientSocket = serverSocket.Accept();
@@ -50,31 +51,37 @@ public static class Server {
 				"accepted client from {0}:{1}",
 				((IPEndPoint) clientSocket.RemoteEndPoint).Address,
 				((IPEndPoint) clientSocket.RemoteEndPoint).Port));
-			
-			lock (_coarseLock) {
-				// send model
-				Protocol.Send(clientSocket, _voxelData);
-				
-				// add client to sockets
-				_clientSockets.Add(clientSocket);
-			}
+		
 			Concurrency.StartThread(() => HandleClient(clientSocket), "server handle client");
 		}
 	}
 	
 	private static void HandleClient(Socket clientSocket) {
+		lock (_coarseLock) {
+			// send model
+			_logger.Log("sending model to client...");
+			Protocol.Send(clientSocket, _voxelData);
+			_logger.Log("...sent model to client");
+			
+			// add client to sockets
+			_clientSockets.Add(clientSocket);
+		}
+
 		while (true) {
 			// deserialize message to command
 			VoxelCommand cmd = (VoxelCommand) Protocol.Receive(clientSocket);
+			_logger.Log ("received command from client");
 			
 			lock (_coarseLock) {
 				// apply command to model
 				cmd.Apply(_voxelData);
 				
 				// broadcast command to other clients
+				_logger.Log ("broadcasting command to clients...");
 				foreach (Socket socket in _clientSockets) {
 					Protocol.Send(socket, cmd);
 				}
+				_logger.Log ("...broadcasted command to clients");
 			}
 		}
 	}
