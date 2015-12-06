@@ -11,10 +11,12 @@ public class Logger {
 	}
 
 	public void Log(string message) {
-		lock (_lock) {
-			String s = String.Format ("{0}: {1}", DateTime.Now.ToString ("MM/dd/yy hh:mm:ss.fff"), message);
-			_writer.WriteLine (s);
-			_writer.Flush ();
+		if (Config.ENABLE_LOGGING) {
+			lock (_lock) {
+				String s = String.Format ("{0}: {1}", DateTime.Now.ToString ("MM/dd/yy hh:mm:ss.fff"), message);
+				_writer.WriteLine (s);
+				_writer.Flush ();
+			}
 		}
 	}
 }
