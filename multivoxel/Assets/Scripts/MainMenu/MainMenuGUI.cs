@@ -42,11 +42,6 @@ public class MainMenuGUI : MonoBehaviour
         {
             // Replace with successful server creation condition
 			Server.Start(Port, Config.SERVER_LOG_FILE);
-            if (true)
-            {
-                PersistentData.Instance.LoadPath = LoadPath;
-                Application.LoadLevel(1);
-            }
         });
 
         ClientButton.onClick.AddListener(() =>
