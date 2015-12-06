@@ -14,7 +14,7 @@ public static class Concurrency {
 				string message = String.Format("Exception from thread \"{0}\":\n{1}",
 					name,
 					e.ToString());
-				logger.Log(message);
+				logger.Error(message);
 				Debug.Log(message);
 			}
 		});
