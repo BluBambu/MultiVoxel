@@ -29,8 +29,8 @@ public class InputManager : MonoBehaviour
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit)) {
                 // If we've clicked on the model, then modify the model
 				CurrentMouseActionType = MouseActionType.Edit;
-				_voxelController.AddVoxel(new Voxel(ConvertToWorldAdjPos(hit), _hsvColorPicker.currentColor));
-			} else {
+                Client.Send(VoxelCommand.Add(new Voxel(ConvertToWorldAdjPos(hit), _hsvColorPicker.currentColor)));
+            } else {
 			    if (!EventSystem.current.IsPointerOverGameObject())
 			    {
                     // If we've clicked on nothing (the background), then move the camera
@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 // If we've clicked on the model, then modify the model
-                _voxelController.RemoveVoxel(ConvertToWorldHitPos(hit));
+                Client.Send(VoxelCommand.Remove(ConvertToWorldHitPos(hit)));
             }
         }
 

@@ -6,7 +6,7 @@ public class VoxelController : MonoBehaviour
 {
     private const float VoxelTransitionTime = 5f;
 
-	private VoxelModelRenderer _voxelRenderer;
+	public static VoxelModelRenderer _voxelRenderer;
     private VoxelAnimation _voxelAnimation;
 	private VoxelData _voxelData;
 
