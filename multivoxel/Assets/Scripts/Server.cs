@@ -39,7 +39,7 @@ public static class Server {
 			"listening on {0}:{1}",
 			((IPEndPoint) serverSocket.LocalEndPoint).Address,
 			((IPEndPoint) serverSocket.LocalEndPoint).Port));
-		Concurrency.StartThread (() => AcceptClients (serverSocket), "server accept client loop");
+		Concurrency.StartThread (() => AcceptClients (serverSocket), "server accept client loop", _logger);
 	}
 
 	private static void AcceptClients(Socket serverSocket) {
@@ -52,7 +52,7 @@ public static class Server {
 				((IPEndPoint) clientSocket.RemoteEndPoint).Address,
 				((IPEndPoint) clientSocket.RemoteEndPoint).Port));
 		
-			Concurrency.StartThread(() => HandleClient(clientSocket), "server handle client");
+			Concurrency.StartThread(() => HandleClient(clientSocket), "server handle client", _logger);
 		}
 	}
 	

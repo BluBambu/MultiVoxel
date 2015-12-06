@@ -25,8 +25,8 @@ public static class Client {
 			"...connected to {0}:{1}",
 			((IPEndPoint) _socket.RemoteEndPoint).Address,
 			((IPEndPoint) _socket.RemoteEndPoint).Port));
-		Concurrency.StartThread (Sender, "client sender");
-		Concurrency.StartThread (Receiver, "client receiver");
+		Concurrency.StartThread (Sender, "client sender", _logger);
+		Concurrency.StartThread (Receiver, "client receiver", _logger);
 	}
 	
 	private static void Sender() {
