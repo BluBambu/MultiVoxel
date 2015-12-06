@@ -11,7 +11,6 @@ using System.Net;
  * Game clients should communicate with the server only through methods defined here.
  */
 public static class Client {
-	private static Socket _socket;
 	private static Queue<object> _sendQueue = new Queue<object>();
 	private static IDictionary<System.Type, Queue<object>> _receiveQueues = new Dictionary<System.Type, Queue<object>>();
 	private static Logger _logger;
@@ -19,54 +18,17 @@ public static class Client {
 	// Throws an exception on error.
 	public static void Start(string serverAddress, int serverPort, string logfilePath) {
 		_logger = new Logger (logfilePath);
-		_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		_logger.Log (string.Format("connecting to {0}:{1}...", serverAddress, serverPort));
-		_socket.Connect (serverAddress, serverPort);
+		socket.Connect (serverAddress, serverPort);
 		_logger.Log (string.Format (
 			"...connected to {0}:{1}",
-			((IPEndPoint) _socket.RemoteEndPoint).Address,
-			((IPEndPoint) _socket.RemoteEndPoint).Port));
-		Concurrency.StartThread (Sender, "client sender", _logger);
-		Concurrency.StartThread (Receiver, "client receiver", _logger);
+			((IPEndPoint) socket.RemoteEndPoint).Address,
+			((IPEndPoint) socket.RemoteEndPoint).Port));
+		Concurrency.StartThread (() => Sender(socket), "client sender", _logger);
+		Concurrency.StartThread (() => Receiver(socket), "client receiver", _logger);
 	}
-	
-	private static void Sender() {
-		_logger.Log ("sender thread started");
-		while (true) {
-			bool hasObj = false;
-			object obj = null;
-			lock (_sendQueue) {
-				if (_sendQueue.Count > 0) {
-					hasObj = true;
-					obj = _sendQueue.Dequeue();
-				}
-			}
-			if (hasObj) {
-				System.Type type = obj.GetType();
-				_logger.Log (string.Format("sending object of type {0}...", type));
-				Protocol.Send(_socket, obj);
-				_logger.Log (string.Format("sent object of type {0}", type));
-			}
-		}
-	}
-	
-	private static void Receiver() {
-		_logger.Log ("receiver thread started");
-		while (true) {
-			object obj = Protocol.Receive(_socket);
-			System.Type type = obj.GetType();
-			_logger.Log(string.Format("received object of type {0}", type));
-			lock (_receiveQueues) {
-				Queue<object> queue;
-				if (!_receiveQueues.TryGetValue(type, out queue)) {
-					queue = new Queue<object>();
-					_receiveQueues.Add (type, queue);
-				}
-				queue.Enqueue(obj);
-			}
-		}
-	}
-	
+
 	// Send an object to the server.
 	// Requires that obj is serializable.
 	public static void Send(object obj) {
@@ -104,6 +66,43 @@ public static class Client {
 			}
 			t = default(T);
 			return false;
+		}
+	}
+
+	private static void Sender(Socket socket) {
+		_logger.Log ("sender thread started");
+		while (true) {
+			bool hasObj = false;
+			object obj = null;
+			lock (_sendQueue) {
+				if (_sendQueue.Count > 0) {
+					hasObj = true;
+					obj = _sendQueue.Dequeue();
+				}
+			}
+			if (hasObj) {
+				System.Type type = obj.GetType();
+				_logger.Log (string.Format("sending object of type {0}...", type));
+				Protocol.Send(socket, obj);
+				_logger.Log (string.Format("sent object of type {0}", type));
+			}
+		}
+	}
+	
+	private static void Receiver(Socket socket) {
+		_logger.Log ("receiver thread started");
+		while (true) {
+			object obj = Protocol.Receive(socket);
+			System.Type type = obj.GetType();
+			_logger.Log(string.Format("received object of type {0}", type));
+			lock (_receiveQueues) {
+				Queue<object> queue;
+				if (!_receiveQueues.TryGetValue(type, out queue)) {
+					queue = new Queue<object>();
+					_receiveQueues.Add (type, queue);
+				}
+				queue.Enqueue(obj);
+			}
 		}
 	}
 }

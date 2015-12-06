@@ -18,7 +18,9 @@ using System.Collections.Generic;
  *   Sends VoxelData to each new client
  */
 public static class Server {
-	
+
+	private static Logger _logger;
+
 	/*
 	 * coarseLock should be held by code that does any of the following:
 	 *   mutating clientSockets
@@ -28,7 +30,6 @@ public static class Server {
 	private static object _coarseLock = new object();
 	private static List<Socket> _clientSockets = new List<Socket>();
 	private static VoxelData _voxelData = new VoxelData();
-	private static Logger _logger;
 
 	// Throws an exception on error.
 	public static void Start(int tcpPort, string logfilePath) {
