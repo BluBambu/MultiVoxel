@@ -13,10 +13,14 @@ public class Logger {
 	public void Log(string message) {
 		if (Config.ENABLE_LOGGING) {
 			lock (_lock) {
-				String s = String.Format ("{0}: {1}", DateTime.Now.ToString ("MM/dd/yy hh:mm:ss.fff"), message);
+				String s = String.Format ("{0}: {1}", GetTimestamp(), message);
 				_writer.WriteLine (s);
 				_writer.Flush ();
 			}
 		}
+	}
+
+	private static string GetTimestamp() {
+		return DateTime.Now.ToString ("hh:mm:ss.fff");
 	}
 }
