@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Net;
 
 /*
  * Client provides static methods to
@@ -13,14 +14,21 @@ public static class Client {
 	private static Socket _socket;
 	private static Queue<object> _sendQueue = new Queue<object>();
 	private static IDictionary<System.Type, Queue<object>> _receiveQueues = new Dictionary<System.Type, Queue<object>>();
-
-	public static void Start(string serverAddress, int serverPort) {
+	private static Logger _logger;
+	
+	public static void Start(string serverAddress, int serverPort, string logfilePath) {
+		_logger = new Logger (logfilePath);
 		_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+		_logger.Log (string.Format("connecting to {0}:{1}...", serverAddress, serverPort));
 		_socket.Connect (serverAddress, serverPort);
+		_logger.Log (string.Format (
+			"...connected to {0}:{1}",
+			((IPEndPoint) _socket.RemoteEndPoint).Address,
+			((IPEndPoint) _socket.RemoteEndPoint).Port));
 		Concurrency.StartThread (Sender, "client sender");
 		Concurrency.StartThread (Receiver, "client receiver");
 	}
-
+	
 	private static void Sender() {
 		while (true) {
 			bool hasObj = false;
@@ -36,7 +44,7 @@ public static class Client {
 			}
 		}
 	}
-
+	
 	private static void Receiver() {
 		while (true) {
 			object obj = Protocol.Receive(_socket);
@@ -51,7 +59,7 @@ public static class Client {
 			}
 		}
 	}
-
+	
 	// Send an object to the server.
 	// Requires that obj is serializable.
 	public static void Send(object obj) {
@@ -59,7 +67,7 @@ public static class Client {
 			_sendQueue.Enqueue(obj);
 		}
 	}
-
+	
 	/*
 	 * Retrieve the next object of type T sent from the server, if available.
 	 * Non-blocking (does no I/O operations).
@@ -92,4 +100,3 @@ public static class Client {
 		}
 	}
 }
-

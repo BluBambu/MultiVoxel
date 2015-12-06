@@ -41,7 +41,7 @@ public class MainMenuGUI : MonoBehaviour
         ServerButton.onClick.AddListener(() =>
         {
             // Replace with successful server creation condition
-			Server.Start(Port);
+			Server.Start(Port, Config.SERVER_LOG_FILE);
             if (true)
             {
                 PersistentData.Instance.LoadPath = LoadPath;
@@ -52,7 +52,7 @@ public class MainMenuGUI : MonoBehaviour
         ClientButton.onClick.AddListener(() =>
         {
             // Replace with successful client creation condition
-			Client.Start(IpAddress, Port);
+			Client.Start(IpAddress, Port, Config.CLIENT_LOG_FILE);
             if (true)
             {
                 Application.LoadLevel(1);
