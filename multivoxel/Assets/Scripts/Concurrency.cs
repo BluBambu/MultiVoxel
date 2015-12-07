@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 public static class Concurrency {
 
@@ -19,5 +20,17 @@ public static class Concurrency {
 			}
 		});
 		thread.Start();
+	}
+
+	public static bool Dequeue(Queue<object> queue, out object obj) {
+		lock (queue) {
+			if (queue.Count > 0) {
+				obj = queue.Dequeue();
+				return true;
+			} else {
+				obj = null;
+				return false;
+			}
+		}
 	}
 }
