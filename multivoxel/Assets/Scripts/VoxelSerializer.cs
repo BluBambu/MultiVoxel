@@ -4,6 +4,14 @@ using System.IO;
 using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 
+[Serializable]
+public class SerializedVoxelData {
+	public readonly byte[] bytes;
+	public SerializedVoxelData(byte[] bytes) {
+		this.bytes = bytes;
+	}
+}
+
 public static class VoxelSerializer
 {
     // TODO: Cache all the binary formatters
@@ -28,7 +36,7 @@ public static class VoxelSerializer
         }
     }
 
-    public static byte[] SerializeVoxelData(VoxelData voxelData)
+	public static SerializedVoxelData SerializeVoxelData(VoxelData voxelData)
     {
         if (voxelData == null)
         {
@@ -40,12 +48,12 @@ public static class VoxelSerializer
         using (MemoryStream stream = new MemoryStream())
         {
             formatter.Serialize(stream, voxelData.Voxels);
-            return stream.ToArray();
+            return new SerializedVoxelData(stream.ToArray());
         }
     }
 
     // The given data should have been produced by calling SerializeVoxelData()
-    public static VoxelData DeserializeVoxelData(byte[] data)
+    public static VoxelData DeserializeVoxelData(SerializedVoxelData data)
     {
         if (data == null)
         {
@@ -54,7 +62,7 @@ public static class VoxelSerializer
         }
 
         BinaryFormatter formatter = new BinaryFormatter();
-        using (MemoryStream stream = new MemoryStream(data))
+        using (MemoryStream stream = new MemoryStream(data.bytes))
         {
             return new VoxelData((Voxel[]) formatter.Deserialize(stream));
         }
@@ -62,12 +70,12 @@ public static class VoxelSerializer
 
     public static VoxelData VoxelDataFromFile(string filepath)
     {
-        return DeserializeVoxelData(File.ReadAllBytes(filepath));
+        return DeserializeVoxelData(new SerializedVoxelData(File.ReadAllBytes(filepath)));
     }
 
     public static void VoxelDataToFile(string filepath, VoxelData data)
     {
-        File.WriteAllBytes(filepath, SerializeVoxelData(data));
+        File.WriteAllBytes(filepath, SerializeVoxelData(data).bytes);
     }
 
     public static void VoxelMeshToObjFile(string filepath, MeshFilter mf)

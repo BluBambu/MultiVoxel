@@ -22,11 +22,13 @@ public class NetworkManager : MonoBehaviour
         else
         {
             // check for model
-            _hasReceivedModel = Client.TryReceive<VoxelData>(out _voxelData);
+			SerializedVoxelData data;
+            _hasReceivedModel = Client.TryReceive<SerializedVoxelData>(out data);
 
             if (_hasReceivedModel)
             {
                 // render for first time
+				_voxelData = VoxelSerializer.DeserializeVoxelData(data);
                 VoxelController._voxelRenderer.RenderMesh(_voxelData);
             }
         }

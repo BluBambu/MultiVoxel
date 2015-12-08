@@ -62,7 +62,7 @@ public static class Server {
 		lock (_coarseLock) {
 			// send model
 			_logger.Log("sending model to client...");
-			Protocol.Send(clientSocket, _voxelData);
+			Protocol.Send(clientSocket, VoxelSerializer.SerializeVoxelData(_voxelData));
 			_logger.Log("...sent model to client");
 			
 			// add client to sockets
