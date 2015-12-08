@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class NetworkManager : MonoBehaviour
@@ -13,7 +13,7 @@ public class NetworkManager : MonoBehaviour
         {
             // check for command
             VoxelCommand cmd;
-            if (Client.TryReceive<VoxelCommand>(out cmd))
+            if (Client.TryReceiveTcp<VoxelCommand>(out cmd))
             {
                 cmd.Apply(_voxelData);
                 VoxelController._voxelRenderer.RenderMesh(_voxelData);
@@ -23,7 +23,7 @@ public class NetworkManager : MonoBehaviour
         {
             // check for model
 			SerializedVoxelData data;
-            _hasReceivedModel = Client.TryReceive<SerializedVoxelData>(out data);
+            _hasReceivedModel = Client.TryReceiveTcp<SerializedVoxelData>(out data);
 
             if (_hasReceivedModel)
             {

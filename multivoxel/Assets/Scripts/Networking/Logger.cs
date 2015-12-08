@@ -11,21 +11,21 @@ public class Logger {
 	}
 
 	public void Log(string message) {
-		Print ("LOG  ", message);
+		Print ("LOG:  ", message);
 	}
 
 	public void Warn(string message) {
-		Print ("WARN ", message);
+		Print ("WARN: ", message);
 	}
 
 	public void Error(string message) {
-		Print ("ERROR", message);
+		Print ("ERROR:", message);
 	}
 
 	private void Print(string prefix, string message) {
 		if (Config.ENABLE_LOGGING) {
 			lock (_lock) {
-				String s = String.Format ("{0} {1}: {2}", GetTimestamp(), prefix, message);
+				String s = String.Format ("{0} {1}{2}", GetTimestamp(), prefix, message);
 				_writer.WriteLine (s);
 				_writer.Flush ();
 			}

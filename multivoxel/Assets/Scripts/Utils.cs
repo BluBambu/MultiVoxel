@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Net;
 
 /// <summary>
 /// Provides a bunch of utility methods
@@ -21,4 +22,9 @@ public static class Utils
         }
         return Mathf.Clamp(angle, min, max);
     }
+
+	public static string IPAddressToString(EndPoint endPoint) {
+		IPEndPoint ipEndPoint = (IPEndPoint) endPoint;
+		return string.Format ("{0}:{1}", ipEndPoint.Address, ipEndPoint.Port);
+	}
 }

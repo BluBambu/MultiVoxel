@@ -10,6 +10,7 @@ public static class Concurrency {
 	public static void StartThread(Action func, string name, Logger logger) {
 		Thread thread = new Thread(() => {
 			try {
+				logger.Log(string.Format("{0} thread started", name));
 				func();
 			} catch (Exception e) {
 				string message = String.Format("Exception from thread \"{0}\":\n{1}",
@@ -20,6 +21,12 @@ public static class Concurrency {
 			}
 		});
 		thread.Start();
+	}
+
+	public static void Enqueue(Queue<object> queue, object obj) {
+		lock (queue) {
+			queue.Enqueue(obj);
+		}
 	}
 
 	public static bool Dequeue(Queue<object> queue, out object obj) {

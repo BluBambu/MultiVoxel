@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
@@ -29,7 +29,7 @@ public class InputManager : MonoBehaviour
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit)) {
                 // If we've clicked on the model, then modify the model
 				CurrentMouseActionType = MouseActionType.Edit;
-                Client.Send(VoxelCommand.Add(new Voxel(ConvertToWorldAdjPos(hit), _hsvColorPicker.currentColor)));
+                Client.SendTcp(VoxelCommand.Add(new Voxel(ConvertToWorldAdjPos(hit), _hsvColorPicker.currentColor)));
             } else {
 			    if (!EventSystem.current.IsPointerOverGameObject())
 			    {
@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 // If we've clicked on the model, then modify the model
-                Client.Send(VoxelCommand.Remove(ConvertToWorldHitPos(hit)));
+                Client.SendTcp(VoxelCommand.Remove(ConvertToWorldHitPos(hit)));
             }
         }
 

@@ -42,7 +42,7 @@ public class MainMenuGUI : MonoBehaviour
         {
             // try to start the server
 			try {
-				Server.Start(Port, Config.SERVER_LOG_FILE);
+				Server.Start(Port, Port, Config.SERVER_LOG_FILE);
 			} catch (Exception e) {
 				WriteToErrorBox(e.ToString());
 			}
@@ -54,7 +54,7 @@ public class MainMenuGUI : MonoBehaviour
         {
             // try to start the client
 			try {
-				Client.Start(IpAddress, Port, Config.CLIENT_LOG_FILE);
+				Client.Start(IpAddress, Port, Port, Config.CLIENT_LOG_FILE);
 			} catch (Exception e) {
 				WriteToErrorBox(e.ToString());
 				return;
