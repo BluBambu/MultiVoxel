@@ -72,19 +72,12 @@ public static class Client {
 	private static void Sender(Socket socket) {
 		_logger.Log ("sender thread started");
 		while (true) {
-			bool hasObj = false;
 			object obj = null;
-			lock (_sendQueue) {
-				if (_sendQueue.Count > 0) {
-					hasObj = true;
-					obj = _sendQueue.Dequeue();
-				}
-			}
-			if (hasObj) {
+			if (Concurrency.Dequeue(_sendQueue, out obj)) {
 				System.Type type = obj.GetType();
 				_logger.Log (string.Format("sending object of type {0}...", type));
 				Protocol.Send(socket, obj);
-				_logger.Log (string.Format("sent object of type {0}", type));
+				_logger.Log (string.Format("...sent object of type {0}", type));
 			}
 		}
 	}
