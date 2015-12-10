@@ -87,7 +87,7 @@ public static class Server {
 
 		while (true) {
 			// deserialize message to command
-			object obj = (VoxelCommand) Protocol.Receive(clientSocket);
+			object obj = Protocol.Receive(clientSocket);
 			_logger.Log ("TCP received object from client");
 
 			lock (_coarseLock) {
