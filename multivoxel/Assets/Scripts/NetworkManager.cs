@@ -5,7 +5,13 @@ public class NetworkManager : MonoBehaviour
 {
 
 	private static bool _hasReceivedModel = false;
-	private static VoxelData _voxelData;
+    private VoxelController _voxelController;
+
+    private void Awake()
+    {
+        _voxelController = GameObject.FindObjectOfType<VoxelController>();
+    }
+
 	// Update is called once per frame
     private void Update()
     {
@@ -15,8 +21,7 @@ public class NetworkManager : MonoBehaviour
             VoxelCommand cmd;
             if (Client.TryReceiveTcp<VoxelCommand>(out cmd))
             {
-                cmd.Apply(_voxelData);
-                VoxelController._voxelRenderer.RenderMesh(_voxelData);
+                cmd.Apply(_voxelController);
             }
         }
         else
@@ -28,8 +33,8 @@ public class NetworkManager : MonoBehaviour
             if (_hasReceivedModel)
             {
                 // render for first time
-				_voxelData = VoxelSerializer.DeserializeVoxelData(data);
-                VoxelController._voxelRenderer.RenderMesh(_voxelData);
+				VoxelData voxelData = VoxelSerializer.DeserializeVoxelData(data);
+                _voxelController.ChangeData(voxelData);
             }
         }
     }

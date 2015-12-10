@@ -48,4 +48,9 @@ public class VoxelData
     {
     	return _data.ContainsKey(pos);
     }
+
+    public Voxel VoxelAtPos(Vector3Int pos)
+    {
+        return _data[pos];
+    }
 }

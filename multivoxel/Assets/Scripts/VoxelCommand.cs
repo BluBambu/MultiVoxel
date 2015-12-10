@@ -24,16 +24,31 @@ public class VoxelCommand {
 		return cmd;
 	}
 
-	public void Apply (VoxelData voxelData) {
+	public void Apply (VoxelController voxelController) {
 		switch (_type) {
 		case Type.Add:
-			voxelData.AddVoxel(_voxel);
+                voxelController.AddVoxel(_voxel);
 			break;
 		case Type.Remove:
-			voxelData.RemoveVoxel(_pos);
+                voxelController.RemoveVoxel(_pos);
 			break;
 		default:
 			throw new UnityException();
 		}
 	}
+
+    public void Apply(VoxelData voxelData)
+    {
+        switch (_type)
+        {
+            case Type.Add:
+                voxelData.AddVoxel(_voxel);
+                break;
+            case Type.Remove:
+                voxelData.RemoveVoxel(_pos);
+                break;
+            default:
+                throw new UnityException();
+        }
+    }
 }

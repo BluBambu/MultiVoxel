@@ -23,16 +23,33 @@ public class VoxelController : MonoBehaviour
         _voxelRenderer.RenderMesh(_voxelData);
 	}
 
+    public void ChangeData(VoxelData voxelData)
+    {
+        _voxelData = voxelData;
+        _voxelRenderer.RenderMesh(_voxelData);
+    }
+
     public void AddVoxel(Voxel voxel)
     {
-        _voxelData.AddVoxel(voxel);
-        _voxelRenderer.RenderMesh(_voxelData);
-    } 
+        _voxelAnimation.AddVoxelAnimation(_voxelData.HasVoxelAtPos(voxel.Pos), voxel, () =>
+        {
+            _voxelData.AddVoxel(voxel);
+            _voxelRenderer.RenderMesh(_voxelData);
+        });
+    }
 
     public void RemoveVoxel(Vector3Int pos)
     {
-        _voxelData.RemoveVoxel(pos);
-        _voxelRenderer.RenderMesh(_voxelData);
+        Voxel voxel = new Voxel();
+        if (_voxelData.HasVoxelAtPos(pos))
+        {
+            voxel = _voxelData.VoxelAtPos(pos);
+        }
+        _voxelAnimation.RemoveVoxelAnimation(_voxelData.HasVoxelAtPos(pos), voxel, () =>
+        {
+            _voxelData.RemoveVoxel(pos);
+            _voxelRenderer.RenderMesh(_voxelData);
+        });
     }
 
     /// <summary>
