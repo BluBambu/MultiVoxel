@@ -7,7 +7,8 @@ public class Logger {
 	private object _lock = new object();
 
 	public Logger(string filepath) {
-		_writer = new StreamWriter(File.Create (filepath));
+		if (Config.ENABLE_LOGGING)
+			_writer = new StreamWriter(File.Create (filepath));
 	}
 
 	public void Log(string message) {

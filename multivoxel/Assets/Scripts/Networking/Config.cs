@@ -3,7 +3,7 @@
 public static class Config {
 	public const string SERVER_LOG_FILE = "./server.log";
 	public const string CLIENT_LOG_FILE = "./client.log";
-	public const bool ENABLE_LOGGING = true;
+	public static readonly bool ENABLE_LOGGING = !Contains(System.Environment.GetCommandLineArgs(), "--no-log");
 	public const bool ENABLE_UDP_LOGGING = true; // this will probably flood the logs with UDP events
 
 	private static bool Contains(string[] strings, string s) {
