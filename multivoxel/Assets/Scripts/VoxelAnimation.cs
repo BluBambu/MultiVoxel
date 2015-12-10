@@ -83,6 +83,7 @@ public class VoxelAnimation : MonoBehaviour
                 AnimTuple anim = new AnimTuple();
                 _animDic[voxel.Pos] = anim;
                 anim.Trans = CreateAnimTransform(voxel);
+                anim.Trans.localScale = Vector3.one;
                 anim.Cor = anim.Trans.GetComponent<MonoBehaviour>().StartCoroutine(RemoveVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
                 {
                     finishCallback();
@@ -94,7 +95,7 @@ public class VoxelAnimation : MonoBehaviour
 
     private IEnumerator AddVoxelAnimationCor(Vector3Int pos, Transform animTrans, Action finishCallback)
     {
-        while (animTrans.localScale.x < .95f)
+        while (animTrans.localScale.x < .98f)
         {
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.one, .1f);
             yield return null;
@@ -107,7 +108,7 @@ public class VoxelAnimation : MonoBehaviour
 
     private IEnumerator RemoveVoxelAnimationCor(Vector3Int pos, Transform animTrans, Action finishCallback)
     {
-        while (animTrans.localScale.x > .05f)
+        while (animTrans.localScale.x > .02f)
         {
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.zero, .1f);
             yield return null;

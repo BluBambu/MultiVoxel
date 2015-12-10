@@ -31,6 +31,7 @@ public class VoxelController : MonoBehaviour
 
     public void AddVoxel(Voxel voxel)
     {
+
         _voxelAnimation.AddVoxelAnimation(_voxelData.HasVoxelAtPos(voxel.Pos), voxel, () =>
         {
             _voxelData.AddVoxel(voxel);
@@ -40,16 +41,18 @@ public class VoxelController : MonoBehaviour
 
     public void RemoveVoxel(Vector3Int pos)
     {
-        Voxel voxel = new Voxel();
         if (_voxelData.HasVoxelAtPos(pos))
         {
+            Voxel voxel = new Voxel();
             voxel = _voxelData.VoxelAtPos(pos);
-        }
-        _voxelAnimation.RemoveVoxelAnimation(_voxelData.HasVoxelAtPos(pos), voxel, () =>
-        {
+
             _voxelData.RemoveVoxel(pos);
             _voxelRenderer.RenderMesh(_voxelData);
-        });
+            _voxelAnimation.RemoveVoxelAnimation(_voxelData.HasVoxelAtPos(pos), voxel, () =>
+            {
+                // None needed
+            });
+        }
     }
 
     /// <summary>
