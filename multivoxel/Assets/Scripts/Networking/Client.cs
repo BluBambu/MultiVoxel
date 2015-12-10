@@ -136,7 +136,8 @@ public static class Client {
 	
 	private static void Receiver(Socket socket) {
 		while (true) {
-			object obj = Protocol.Receive(socket);
+			object obj;
+			Protocol.Receive(socket, out obj);
 			System.Type type = obj.GetType();
 			_logger.Log(string.Format("TCP received object of type {0}", type));
 			lock (_tcpReceiveQueues) {

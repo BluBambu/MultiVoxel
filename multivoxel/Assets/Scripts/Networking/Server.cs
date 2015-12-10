@@ -64,10 +64,14 @@ public static class Server {
 		}
 	}
 	
-	private static void HandleTcpClient(Socket clientSocket) {
+	private static void HandleTcpClient(Socket clientTcpSocket) {
 		// receive UDP port
-		int clientUdpPort = (int) Protocol.Receive(clientSocket);
-		string clientHost = ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString();
+		int clientUdpPort;
+		if (!Protocol.Receive (clientTcpSocket, out clientUdpPort)) {
+			CleanupClient(clientTcpSocket);
+			return;
+		}
+		string clientHost = ((IPEndPoint)clientTcpSocket.RemoteEndPoint).Address.ToString();
 		_logger.Log (string.Format ("received UDP client at {0}:{1}", clientHost, clientUdpPort));
 
 		lock (_clientUdpAddresses) {
@@ -78,16 +82,20 @@ public static class Server {
 		lock (_coarseLock) {
 			// send model
 			_logger.Log("sending model to client...");
-			Protocol.Send(clientSocket, VoxelSerializer.SerializeVoxelData(_voxelData));
+			Protocol.Send(clientTcpSocket, VoxelSerializer.SerializeVoxelData(_voxelData));
 			_logger.Log("...sent model to client");
 			
 			// add client to sockets
-			_clientSockets.Add(clientSocket);
+			_clientSockets.Add(clientTcpSocket);
 		}
 
 		while (true) {
 			// deserialize message to command
-			object obj = Protocol.Receive(clientSocket);
+			object obj;
+			if (!Protocol.Receive(clientTcpSocket, out obj)) {
+				CleanupClient(clientTcpSocket);
+				return;
+			}
 			_logger.Log ("TCP received object from client");
 
 			lock (_coarseLock) {
@@ -124,5 +132,13 @@ public static class Server {
 					_logger.Log ("...UDP broadcasted to clients");
 			}
 		}
+	}
+
+	private static void CleanupClient(Socket clientTcpSocket) {
+		lock (_coarseLock) {
+			_clientSockets.Remove(clientTcpSocket);
+		}
+		_logger.Log (string.Format ("cleaned up client with TCP socket {0}", Utils.IPAddressToString (clientTcpSocket.RemoteEndPoint)));
+		clientTcpSocket.Close ();
 	}
 }
