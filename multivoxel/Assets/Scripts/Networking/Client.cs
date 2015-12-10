@@ -50,7 +50,8 @@ public static class Client {
 	// Non-blocking (does no I/O operations).
 	// Requires that obj is serializable.
 	public static void SendTcp(object obj) {
-		Concurrency.Enqueue (_tcpSendQueue, obj);
+		object copy = Encoding.Copy (obj);
+		Concurrency.Enqueue (_tcpSendQueue, copy);
 	}
 	
 	//Retrieve the *next* object of type T sent from the server over TCP, if available.
@@ -73,7 +74,8 @@ public static class Client {
 	// Non-blocking (does no I/O operations).
 	// Requires that obj is serializable.
 	public static void SendUdp(object obj) {
-		Concurrency.Enqueue (_udpSendQueue, obj);
+		object copy = Encoding.Copy (obj);
+		Concurrency.Enqueue (_udpSendQueue, copy);
 	}
 
 	// Retrieve the *latest* object of type T sent from the server over UDP, if available.

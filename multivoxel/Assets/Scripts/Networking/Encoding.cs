@@ -22,4 +22,7 @@ public static class Encoding {
 		}
 	}
 
+	public static object Copy(object obj) {
+		return Deserialize(Serialize(obj));
+	}
 }

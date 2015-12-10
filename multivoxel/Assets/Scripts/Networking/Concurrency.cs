@@ -23,19 +23,19 @@ public static class Concurrency {
 		thread.Start();
 	}
 
-	public static void Enqueue(Queue<object> queue, object obj) {
+	public static void Enqueue<T>(Queue<T> queue, T t) {
 		lock (queue) {
-			queue.Enqueue(obj);
+			queue.Enqueue(t);
 		}
 	}
 
-	public static bool Dequeue(Queue<object> queue, out object obj) {
+	public static bool Dequeue<T>(Queue<T> queue, out T t) {
 		lock (queue) {
 			if (queue.Count > 0) {
-				obj = queue.Dequeue();
+				t = queue.Dequeue();
 				return true;
 			} else {
-				obj = null;
+				t = default(T);
 				return false;
 			}
 		}
