@@ -97,9 +97,11 @@ public class VoxelAnimation : MonoBehaviour
     {
         while (animTrans.localScale.x < .98f)
         {
+            animTrans.GetComponent<MeshRenderer>().enabled = true;
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.one, .1f);
             yield return null;
         }
+        animTrans.GetComponent<MeshRenderer>().enabled = false;
         if (finishCallback != null)
         {
             finishCallback();
@@ -110,9 +112,11 @@ public class VoxelAnimation : MonoBehaviour
     {
         while (animTrans.localScale.x > .02f)
         {
+            animTrans.GetComponent<MeshRenderer>().enabled = true;
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.zero, .1f);
             yield return null;
         }
+        animTrans.GetComponent<MeshRenderer>().enabled = false;
         if (finishCallback != null)
         {
             finishCallback();
