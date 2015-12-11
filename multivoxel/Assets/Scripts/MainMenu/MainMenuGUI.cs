@@ -41,8 +41,17 @@ public class MainMenuGUI : MonoBehaviour
         ServerButton.onClick.AddListener(() =>
         {
             // try to start the server
+			VoxelData voxelData = null;
 			try {
-				Server.Start(Port, Port, Config.SERVER_LOG_FILE);
+				voxelData = VoxelSerializer.VoxelDataFromFile(LoadPath);
+			} catch (Exception) {
+				voxelData = null;
+			}
+			if (voxelData == null) {
+				voxelData = new VoxelData();
+			}
+			try {
+				Server.Start(Port, Port, Config.SERVER_LOG_FILE, voxelData);
 			} catch (Exception e) {
 				WriteToErrorBox(e.ToString());
 			}

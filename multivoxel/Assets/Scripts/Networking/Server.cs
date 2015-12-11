@@ -31,11 +31,13 @@ public static class Server {
 
 	private static List<Socket> _clientSockets = new List<Socket>();
 	private static List<Address> _clientUdpAddresses = new List<Address> ();
-	private static VoxelData _voxelData = new VoxelData();
+	private static VoxelData _voxelData;
 
 	// Throws an exception on error.
-	public static void Start(int tcpPort, int udpPort, string logfilePath) {
+	public static void Start(int tcpPort, int udpPort, string logfilePath, VoxelData voxelData) {
 		_logger = new Logger (logfilePath);
+
+		_voxelData = voxelData;
 
 		// open TCP listener
 		Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
