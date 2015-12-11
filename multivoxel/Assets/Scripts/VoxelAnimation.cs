@@ -118,8 +118,7 @@ public class VoxelAnimation : MonoBehaviour
             animTrans.GetComponent<MeshRenderer>().enabled = true;
             animTrans.GetComponent<MeshRenderer>().material.shader = Shader.Find("Voxel");
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.zero, .1f);
-            animTrans.GetComponent<BoxCollider>().size = new Vector3(1 / animTrans.localScale.x,
-                1 / animTrans.localScale.y, 1 / animTrans.localScale.z);
+            animTrans.GetComponent<BoxCollider>().size = Vector3.zero;
             yield return null;
         }
         animTrans.GetComponent<MeshRenderer>().enabled = false;
