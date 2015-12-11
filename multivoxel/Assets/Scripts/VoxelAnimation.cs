@@ -34,7 +34,7 @@ public class VoxelAnimation : MonoBehaviour
         {
             AnimTuple anim = _animDic[voxel.Pos];
             anim.Trans.GetComponent<MeshRenderer>().material.color = voxel.Color;
-            anim.Cor = anim.Trans.GetComponent<MonoBehaviour>().StartCoroutine(AddVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
+            anim.Cor = anim.Trans.GetComponent<DummyBehavior>().StartCoroutine(AddVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
             {
                 finishCallback();
             }));
@@ -56,7 +56,7 @@ public class VoxelAnimation : MonoBehaviour
                 AnimTuple anim = new AnimTuple();
                 _animDic[voxel.Pos] = anim;
                 anim.Trans = CreateAnimTransform(voxel);
-                anim.Cor = anim.Trans.GetComponent<MonoBehaviour>().StartCoroutine(AddVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
+                anim.Cor = anim.Trans.GetComponent<DummyBehavior>().StartCoroutine(AddVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
                 {
                     finishCallback();
                 }));
@@ -70,8 +70,8 @@ public class VoxelAnimation : MonoBehaviour
         {
             AnimTuple anim = _animDic[voxel.Pos];
             anim.Trans.GetComponent<MeshRenderer>().material.color = voxel.Color;
-            anim.Trans.GetComponent<MonoBehaviour>().StopAllCoroutines();
-            anim.Cor = anim.Trans.GetComponent<MonoBehaviour>().StartCoroutine(RemoveVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
+            anim.Trans.GetComponent<DummyBehavior>().StopAllCoroutines();
+            anim.Cor = anim.Trans.GetComponent<DummyBehavior>().StartCoroutine(RemoveVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
             {
                 finishCallback();
             }));
@@ -84,7 +84,7 @@ public class VoxelAnimation : MonoBehaviour
                 _animDic[voxel.Pos] = anim;
                 anim.Trans = CreateAnimTransform(voxel);
                 anim.Trans.localScale = Vector3.one;
-                anim.Cor = anim.Trans.GetComponent<MonoBehaviour>().StartCoroutine(RemoveVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
+                anim.Cor = anim.Trans.GetComponent<DummyBehavior>().StartCoroutine(RemoveVoxelAnimationCor(voxel.Pos, anim.Trans, () =>
                 {
                     finishCallback();
                 }));
@@ -98,6 +98,7 @@ public class VoxelAnimation : MonoBehaviour
         while (animTrans.localScale.x < .98f)
         {
             animTrans.GetComponent<MeshRenderer>().enabled = true;
+            animTrans.GetComponent<MeshRenderer>().material.shader = Shader.Find("Voxel");
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.one, .1f);
             yield return null;
         }
@@ -113,6 +114,7 @@ public class VoxelAnimation : MonoBehaviour
         while (animTrans.localScale.x > .02f)
         {
             animTrans.GetComponent<MeshRenderer>().enabled = true;
+            animTrans.GetComponent<MeshRenderer>().material.shader = Shader.Find("Voxel");
             animTrans.localScale = Vector3.Lerp(animTrans.localScale, Vector3.zero, .1f);
             yield return null;
         }
@@ -128,9 +130,9 @@ public class VoxelAnimation : MonoBehaviour
         Transform tempVoxel = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
         tempVoxel.position = (Vector3)voxel.Pos;
         tempVoxel.localScale = Vector3.zero;
+        tempVoxel.GetComponent<MeshRenderer>().material.shader = Shader.Find("Voxel");
         tempVoxel.GetComponent<MeshRenderer>().material.color = voxel.Color;
-        tempVoxel.gameObject.AddComponent<MonoBehaviour>();
-
+        tempVoxel.gameObject.AddComponent<DummyBehavior>();
         return tempVoxel;
     }
 }
