@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
+using System;
 
 /*
  * Client provides static methods to
@@ -14,7 +15,7 @@ public static class Client {
 	private static Queue<object> _tcpSendQueue = new Queue<object>();
 	private static Queue<object> _udpSendQueue = new Queue<object>();
 	private static IDictionary<System.Type, Queue<object>> _tcpReceiveQueues = new Dictionary<System.Type, Queue<object>>();
-	private static IDictionary<System.Type, object> _udpReceiveMap = new Dictionary<System.Type, object> ();
+	private static Action<object> _udpCallback = null;
 	private static Logger _logger;
 	private static string _address;
 
@@ -80,19 +81,23 @@ public static class Client {
 		object copy = Encoding.Copy (obj);
 		Concurrency.Enqueue (_udpSendQueue, copy);
 	}
+	
+	/*
+	 * "callback" is called each time a UDP packet is received and deserialized.
+	 * callback blocks the UDP receiver thread, so that additional UDP packets will be received
+	 * only after callback returns.
+	 * 
+	 * Sample usage:
 
-	// Retrieve the *latest* object of type T sent from the server over UDP, if available.
-	// Non-blocking (does no I/O operations).
-	public static bool TryReceiveUdp<T> (out T t) {
-		lock (_udpReceiveMap) {
-			object obj;
-			if (_udpReceiveMap.TryGetValue(typeof(T), out obj)) {
-				t = (T) obj;
-				return true;
-			}
-			t = default(T);
-			return false;
-		}
+		RegisterUdpCallback((obj) => {
+			Console.WriteLine("got UDP obj of type {0}", obj.GetType());
+			Console.WriteLine("doing nothing with it...");
+		});
+	 )
+	 */
+	public static void RegisterUdpCallback(Action<object> callback) {
+		_udpCallback = callback;
+		
 	}
 
 	private static void UdpSender(UdpClient udpClient) {
@@ -119,9 +124,8 @@ public static class Client {
 			if (Config.ENABLE_UDP_LOGGING) {
 				_logger.Log(string.Format ("UDP received object of type {0}", type));
 			}
-			lock (_udpReceiveMap) {
-				_udpReceiveMap.Add(type, obj);
-			}
+			if (_udpCallback != null)
+				_udpCallback(obj);
 		}
 	}
 
