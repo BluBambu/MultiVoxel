@@ -16,7 +16,7 @@ public static class Client {
 	private static IDictionary<System.Type, Queue<object>> _tcpReceiveQueues = new Dictionary<System.Type, Queue<object>>();
 	private static IDictionary<System.Type, object> _udpReceiveMap = new Dictionary<System.Type, object> ();
 	private static Logger _logger;
-	private static readonly string _address;
+	private static string _address;
 
 	// Throws an exception on error.
 	public static void Start(string serverHost, int serverTcpPort, int serverUdpPort, string logfilePath) {
