@@ -16,6 +16,7 @@ public static class Client {
 	private static IDictionary<System.Type, Queue<object>> _tcpReceiveQueues = new Dictionary<System.Type, Queue<object>>();
 	private static IDictionary<System.Type, object> _udpReceiveMap = new Dictionary<System.Type, object> ();
 	private static Logger _logger;
+	private static readonly string _address;
 
 	// Throws an exception on error.
 	public static void Start(string serverHost, int serverTcpPort, int serverUdpPort, string logfilePath) {
@@ -26,10 +27,8 @@ public static class Client {
 
 		_logger.Log (string.Format("TCP connecting to {0}:{1}...", serverHost, serverTcpPort));
 		tcpSocket.Connect (serverHost, serverTcpPort);
-		_logger.Log (string.Format (
-			"...TCP connected to {0}:{1}",
-			((IPEndPoint) tcpSocket.RemoteEndPoint).Address,
-			((IPEndPoint) tcpSocket.RemoteEndPoint).Port));
+		_logger.Log (string.Format ("...TCP connected to {0}", Utils.IPAddressToString(tcpSocket.RemoteEndPoint)));
+		_address = Utils.IPAddressToString (tcpSocket.LocalEndPoint);
 
 		_logger.Log ("starting UDP client...");
 		UdpClient udpClient = new UdpClient (serverHost, serverUdpPort);
@@ -42,8 +41,12 @@ public static class Client {
 
 		Concurrency.StartThread (() => UdpSender(udpClient), "client UDP sender", _logger);
 		Concurrency.StartThread (() => UdpReceiver(udpClient), "client UDP receiver", _logger);
-		Concurrency.StartThread (() => Sender(tcpSocket), "client TCP sender", _logger);
-		Concurrency.StartThread (() => Receiver(tcpSocket), "client TCP receiver", _logger);
+		Concurrency.StartThread (() => TcpSender(tcpSocket), "client TCP sender", _logger);
+		Concurrency.StartThread (() => TcpReceiver(tcpSocket), "client TCP receiver", _logger);
+	}
+
+	public static string GetAddress() {
+		return _address;
 	}
 
 	// Send an object to the server over TCP.
@@ -122,7 +125,7 @@ public static class Client {
 		}
 	}
 
-	private static void Sender(Socket socket) {
+	private static void TcpSender(Socket socket) {
 		while (true) {
 			object obj = null;
 			if (Concurrency.Dequeue(_tcpSendQueue, out obj)) {
@@ -134,7 +137,7 @@ public static class Client {
 		}
 	}
 	
-	private static void Receiver(Socket socket) {
+	private static void TcpReceiver(Socket socket) {
 		while (true) {
 			object obj;
 			Protocol.Receive(socket, out obj);
