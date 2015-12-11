@@ -36,7 +36,7 @@ public static class Protocol {
 		try {
 			socket.Send (lenBytes);
 			socket.Send (data);
-		} catch (ObjectDisposedException) {
+		} catch (System.Exception) {
 			return false;
 		}
 		return true;
@@ -66,7 +66,7 @@ public static class Protocol {
 			// set outparam
 			t = (T) Encoding.Deserialize(data);
 			return true;
-		} catch (ObjectDisposedException) {
+		} catch (System.Exception) {
 			t = default(T);
 			return false;
 		}
