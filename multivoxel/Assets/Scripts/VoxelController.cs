@@ -45,10 +45,9 @@ public class VoxelController : MonoBehaviour
         {
             Voxel voxel = new Voxel();
             voxel = _voxelData.VoxelAtPos(pos);
-
             _voxelData.RemoveVoxel(pos);
             _voxelRenderer.RenderMesh(_voxelData);
-            _voxelAnimation.RemoveVoxelAnimation(_voxelData.HasVoxelAtPos(pos), voxel, () =>
+            _voxelAnimation.RemoveVoxelAnimation(true, voxel, () =>
             {
                 // None needed
             });
